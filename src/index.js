@@ -63,7 +63,6 @@ function start() {
           // } catch (error) {
           //   console.log(error);
           // }
-          stop();
           resolve();
         } else {
           backgroundEl.style.backgroundColor =
