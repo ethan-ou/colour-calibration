@@ -1,19 +1,18 @@
 {
-  "name": "vanilla",
+  "name": "color-calibration",
   "version": "1.0.0",
-  "description": "JavaScript example starter project",
-  "main": "index.html",
+  "description": "A color swatch display for calibrating cameras and screens.",
+  "main": "src/index.js",
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html",
     "test": "jest"
   },
   "dependencies": {
-    "parcel-bundler": "^1.6.1",
+    "parcel": "^2.0.0-beta.2",
     "worker-timers": "7.0.33"
   },
   "devDependencies": {
-    "@babel/core": "7.2.0",
     "jest": "27.0.4"
   },
   "resolutions": {
