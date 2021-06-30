@@ -4,7 +4,7 @@
   "description": "A color swatch display for calibrating cameras and screens.",
   "scripts": {
     "start": "parcel serve index.html",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --public-url ./",
     "test": "jest"
   },
   "dependencies": {
