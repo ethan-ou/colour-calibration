@@ -2,9 +2,8 @@
   "name": "color-calibration",
   "version": "1.0.0",
   "description": "A color swatch display for calibrating cameras and screens.",
-  "main": "src/index.js",
   "scripts": {
-    "start": "parcel index.html --open",
+    "start": "parcel serve index.html",
     "build": "parcel build index.html",
     "test": "jest"
   },
