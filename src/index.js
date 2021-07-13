@@ -1,8 +1,5 @@
 import { colorPatches, grayscalePatches, prePatches } from "./patches";
-
 import { accurateInterval } from "./interval";
-
-// const statusSound = new Audio("../media/Marker.wav");
 
 const backgroundEl = document.getElementById("background");
 const statusEl = document.getElementById("status");
@@ -13,7 +10,7 @@ const patchesRemaining = document.querySelector(
 
 const state = {
   mode: "color",
-  interval: 250,
+  interval: 500,
   running: false,
   preQueueIdx: 0,
   queueIdx: 0,
@@ -57,24 +54,12 @@ function start() {
           state.preQueueIdx === state.preQueue.length
         ) {
           preInterval.cancel();
-
-          // try {
-          //   statusSound.play();
-          // } catch (error) {
-          //   console.log(error);
-          // }
           resolve();
         } else {
           backgroundEl.style.backgroundColor =
             state.preQueue[state.preQueueIdx];
           state.preQueueIdx++;
           patchesRemaining.textContent = "Pre-Start";
-
-          // try {
-          //   statusSound.play();
-          // } catch (error) {
-          //   console.log(error);
-          // }
         }
       }, 1000);
     });
@@ -98,12 +83,6 @@ function start() {
       const interval = accurateInterval(() => {
         if (state.running === false || state.queueIdx === state.queue.length) {
           interval.cancel();
-          // try {
-          //   statusSound.play();
-          // } catch (error) {
-          //   console.log(error);
-          // }
-
           stop();
           resolve();
         } else {
