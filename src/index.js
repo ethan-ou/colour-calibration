@@ -1,4 +1,4 @@
-import { colorPatches, grayscalePatches, prePatches } from "./patches";
+import { colourPatches, grayscalePatches, prePatches } from "./patches";
 import { accurateInterval } from "./interval";
 
 const backgroundEl = document.getElementById("background");
@@ -9,7 +9,7 @@ const patchesRemaining = document.querySelector(
 );
 
 const state = {
-  mode: "color",
+  mode: "colour",
   interval: 500,
   running: false,
   preQueueIdx: 0,
@@ -28,7 +28,7 @@ statusEl.addEventListener("click", (e) => {
     case "stop":
       stop();
       break;
-    case "color":
+    case "colour":
       changeMode(mode);
       break;
     case "grayscale":
@@ -68,7 +68,7 @@ function start() {
   const onStart = () => {
     return new Promise((resolve, reject) => {
       switch (state.mode) {
-        case "color":
+        case "colour":
           state.queue = colorPatches();
           break;
         case "grayscale":

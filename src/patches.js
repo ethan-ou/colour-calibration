@@ -1,31 +1,31 @@
-export const colorMode = (number) => Math.pow(number, 3);
+export const colourMode = (number) => Math.pow(number, 3);
 
 export const grayscaleMode = (number) => number;
 
-export function colorPatches(quantity = 4096) {
+export function colourPatches(quantity = 4096) {
   if (quantity < 2) {
     throw Error("Quantity cannot be lower than 2.");
   }
 
-  const colorsPerChannel = Math.cbrt(quantity);
+  const coloursPerChannel = Math.cbrt(quantity);
 
-  if (!Number.isInteger(colorsPerChannel)) {
+  if (!Number.isInteger(coloursPerChannel)) {
     throw Error("Number of patches needs to be an integer under a cube root.");
   }
 
-  const values = createChannelValues(colorsPerChannel);
+  const values = createChannelValues(coloursPerChannel);
 
-  const colors = [];
+  const colours = [];
 
   for (let r = 0; r < values.length; r++) {
     for (let g = 0; g < values.length; g++) {
       for (let b = 0; b < values.length; b++) {
-        colors.push(`rgb(${values[r]}, ${values[g]}, ${values[b]})`);
+        colours.push(`rgb(${values[r]}, ${values[g]}, ${values[b]})`);
       }
     }
   }
 
-  return colors;
+  return colours;
 }
 
 export function grayscalePatches(quantity = 33) {
@@ -38,16 +38,16 @@ export function grayscalePatches(quantity = 33) {
 }
 
 export function prePatches(quantity = 3) {
-  const colors = [];
+  const colours = [];
 
   for (let i = 0; i < quantity; i++) {
-    colors.push(`rgb(255, 255, 255)`);
-    colors.push(`rgb(0, 0, 0)`);
+    colours.push(`rgb(255, 255, 255)`);
+    colours.push(`rgb(0, 0, 0)`);
   }
 
-  colors.push(`rgb(255, 255, 255)`);
+  colours.push(`rgb(255, 255, 255)`);
 
-  return colors;
+  return colours;
 }
 
 function createChannelValues(quantity) {
