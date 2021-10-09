@@ -69,7 +69,7 @@ function start() {
     return new Promise((resolve, reject) => {
       switch (state.mode) {
         case "colour":
-          state.queue = colorPatches();
+          state.queue = colourPatches();
           break;
         case "grayscale":
           state.queue = grayscalePatches();
