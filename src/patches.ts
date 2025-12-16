@@ -12,18 +12,15 @@ export type ColorSpace =
   | "rec2100-hlg"
   | "rec2100-linear";
 
-export function colourPatches(quantity: number = 4096, colorSpace: ColorSpace = "srgb"): string[] {
-  if (quantity < 2) {
-    throw Error("Quantity cannot be lower than 2.");
+export function colourPatches(
+  quantityPerChannel: number = 16,
+  colorSpace: ColorSpace = "srgb"
+): string[] {
+  if (quantityPerChannel < 2) {
+    throw Error("Quantity per channel cannot be lower than 2.");
   }
 
-  const coloursPerChannel = Math.cbrt(quantity);
-
-  if (!Number.isInteger(coloursPerChannel)) {
-    throw Error("Number of patches needs to be an integer under a cube root.");
-  }
-
-  const values = createChannelValues(coloursPerChannel);
+  const values = createChannelValues(quantityPerChannel);
 
   const colours: string[] = [];
 

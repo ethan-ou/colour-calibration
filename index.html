@@ -11,32 +11,77 @@
   <body>
     <main id="app">
       <section id="status" class="status">
-        <div class="status__container">
+        <div class="status__container status__container--left">
           <h3 class="status__text">Status: <span data-mode="patchesRemaining">Waiting</span></h3>
         </div>
-        <div class="status__container">
-          <label for="colorSpace" class="status__label">Color Space:</label>
-          <select id="colorSpace" class="color-space-select">
-            <option value="srgb">sRGB</option>
-            <option value="srgb-linear">sRGB Linear</option>
-            <option value="display-p3">Display P3</option>
-            <option value="display-p3-linear">Display P3 Linear</option>
-            <option value="rec2020">Rec. 2020</option>
-            <option value="rec2100-pq">Rec. 2100 PQ</option>
-            <option value="rec2100-hlg">Rec. 2100 HLG</option>
-            <option value="rec2100-linear">Rec. 2100 Linear</option>
-          </select>
-        </div>
-        <div class="status__container">
-          <button data-mode="colour" class="button mode-button">Colour</button>
-          <button data-mode="grayscale" class="button mode-button">Grayscale</button>
-        </div>
-        <div class="status__container">
+        <div class="status__container status__container--center">
           <button data-mode="start" class="button mode-button">Start</button>
           <button data-mode="stop" class="button mode-button">Stop</button>
         </div>
+        <div class="status__container status__container--right">
+          <button id="settingsButton" class="button mode-button">Settings</button>
+        </div>
       </section>
       <section id="background" class="background"></section>
+
+      <!-- Settings Dialog -->
+      <dialog id="settingsDialog" class="dialog">
+        <div class="dialog__header">
+          <h2>Settings</h2>
+          <button id="closeDialog" class="dialog__close">&times;</button>
+        </div>
+        <div class="dialog__body">
+          <div class="dialog__section">
+            <label class="dialog__label">Mode:</label>
+            <div class="dialog__button-group">
+              <button data-mode="colour" class="button mode-button">Colour</button>
+              <button data-mode="grayscale" class="button mode-button">Grayscale</button>
+            </div>
+          </div>
+          <div class="dialog__section">
+            <label for="colorSpace" class="dialog__label">Color Space:</label>
+            <select id="colorSpace" class="color-space-select">
+              <option value="srgb">sRGB</option>
+              <option value="srgb-linear">sRGB Linear</option>
+              <option value="display-p3" data-gamut="p3">Display P3</option>
+              <option value="display-p3-linear" data-gamut="p3">Display P3 Linear</option>
+              <option value="rec2020" data-gamut="rec2020">Rec. 2020</option>
+              <option value="rec2100-pq" data-gamut="rec2020">Rec. 2100 PQ</option>
+              <option value="rec2100-hlg" data-gamut="rec2020">Rec. 2100 HLG</option>
+              <option value="rec2100-linear" data-gamut="rec2020">Rec. 2100 Linear</option>
+            </select>
+          </div>
+          <div class="dialog__section">
+            <label for="colourPatchesPerChannel" class="dialog__label"
+              >Color Patches per Channel:</label
+            >
+            <select id="colourPatchesPerChannel" class="color-space-select">
+              <option value="8">8</option>
+              <option value="12">12</option>
+              <option value="16" selected>16</option>
+              <option value="20">20</option>
+              <option value="24">24</option>
+              <option value="28">28</option>
+              <option value="32">32</option>
+            </select>
+            <p class="dialog__info" id="colourPatchesInfo"></p>
+          </div>
+          <div class="dialog__section">
+            <label for="grayscalePatches" class="dialog__label">Grayscale Patches:</label>
+            <select id="grayscalePatches" class="color-space-select">
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+              <option value="64">64</option>
+              <option value="128">128</option>
+              <option value="256">256</option>
+            </select>
+            <p class="dialog__info" id="grayscalePatchesInfo"></p>
+          </div>
+        </div>
+      </dialog>
     </main>
 
     <script type="module" src="src/index.ts"></script>
