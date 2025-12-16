@@ -32,6 +32,36 @@ body {
   margin: 0.2rem;
 }
 
+.status__label {
+  color: #fff;
+  margin-right: 0.5rem;
+  font-size: 14px;
+}
+
+.color-space-select {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.color-space-select:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.color-space-select:focus {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.color-space-select option {
+  background: #333;
+  color: #fff;
+}
+
 .mode-button {
   font-size: 16px;
   height: 28px;

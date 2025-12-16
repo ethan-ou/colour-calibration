@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "description": "A color swatch display for calibrating cameras and screens.",
   "scripts": {
-    "start": "parcel serve index.html",
-    "build": "parcel build index.html --public-url ./",
-    "test": "jest"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
-    "parcel": "^2.0.0-beta.2",
-    "worker-timers": "7.0.33"
+    "worker-timers": "8.0.26"
   },
   "devDependencies": {
-    "jest": "27.0.4"
-  },
-  "resolutions": {
-    "@babel/preset-env": "7.13.8"
+    "@types/node": "^22.0.0",
+    "typescript": "^5.3.0",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.15"
   },
   "keywords": [
     "javascript",

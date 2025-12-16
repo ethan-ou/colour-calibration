@@ -1,15 +1,12 @@
-import { colorPatches, grayscalePatches } from "../src/patches";
-import fs from "fs";
+import { colourPatches as colorPatches, grayscalePatches } from "../src/patches";
+import GrayscalePatches from "./mocks/grayscalePatches.json";
+import ColorPatches from "./mocks/colorPatches.json";
 
 test("Generates Grayscale Patches", () => {
-  const testPatches = JSON.parse(
-    fs.readFileSync("tests/mocks/grayscalePatches.json")
-  );
-
   const patches = grayscalePatches(33);
 
   expect(patches.length).toBe(33);
-  expect(patches).toEqual(testPatches);
+  expect(patches).toEqual(GrayscalePatches);
 
   // Check first and last colours are black and white.
   expect(patches[0]).toBe("rgb(0, 0, 0)");
@@ -18,7 +15,7 @@ test("Generates Grayscale Patches", () => {
 
 test("Generates Color Patches", () => {
   function colorBitPatches() {
-    const colours = [];
+    const colours: string[] = [];
     for (let i = 0; i < 1 << 12; i++) {
       const r = ((i >> 8) & 0xf) * 0x11;
       const g = ((i >> 4) & 0xf) * 0x11;
@@ -28,17 +25,13 @@ test("Generates Color Patches", () => {
     return colours;
   }
 
-  const testPatches = JSON.parse(
-    fs.readFileSync("tests/mocks/colorPatches.json")
-  );
-
   // Check color patches match bit shifted version.
   const generatedTestPatches = colorBitPatches();
 
   const patches = colorPatches(4096);
 
   expect(patches.length).toBe(4096);
-  expect(patches).toEqual(testPatches);
+  expect(patches).toEqual(ColorPatches);
   expect(patches).toEqual(generatedTestPatches);
 
   // Check first and last colours are black and white.
