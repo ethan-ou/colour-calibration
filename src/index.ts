@@ -10,6 +10,7 @@ const colourPatchesPerChannelSelect = document.getElementById(
 const grayscalePatchesSelect = document.getElementById("grayscalePatches") as HTMLSelectElement;
 const colourPatchesInfo = document.getElementById("colourPatchesInfo") as HTMLElement;
 const grayscalePatchesInfo = document.getElementById("grayscalePatchesInfo") as HTMLElement;
+const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
 const settingsButton = document.getElementById("settingsButton") as HTMLButtonElement;
 const settingsDialog = document.getElementById("settingsDialog") as HTMLDialogElement;
 const closeDialogButton = document.getElementById("closeDialog") as HTMLButtonElement;
@@ -74,6 +75,10 @@ settingsDialog.addEventListener("click", (e) => {
     default:
       break;
   }
+});
+
+fullscreenButton.addEventListener("click", () => {
+  toggleFullscreen();
 });
 
 settingsButton.addEventListener("click", () => {
@@ -173,6 +178,27 @@ function changeMode(mode: Mode) {
     settingsDialog.querySelector(`[data-mode="${mode}"]`)?.classList.add("active");
   }
 }
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch((err) => {
+      console.error(`Error attempting to enable fullscreen: ${err.message}`);
+    });
+    fullscreenButton.textContent = "Exit Fullscreen";
+  } else {
+    document.exitFullscreen();
+    fullscreenButton.textContent = "Fullscreen";
+  }
+}
+
+// Update button text when fullscreen changes (e.g., via ESC key)
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) {
+    fullscreenButton.textContent = "Exit Fullscreen";
+  } else {
+    fullscreenButton.textContent = "Fullscreen";
+  }
+});
 
 function changeColorSpace(colorSpace: ColorSpace) {
   if (state.running === false) {
