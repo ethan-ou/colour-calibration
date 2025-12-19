@@ -1,4 +1,4 @@
-import { colourPatches, grayscalePatches, prePatches, type ColorSpace } from "./patches";
+import { colourPatches, prePatches, type ColorSpace } from "./patches";
 import { accurateInterval } from "./interval";
 
 const backgroundEl = document.getElementById("background") as HTMLElement;
@@ -7,9 +7,7 @@ const colorSpaceSelect = document.getElementById("colorSpace") as HTMLSelectElem
 const colourPatchesPerChannelSelect = document.getElementById(
   "colourPatchesPerChannel"
 ) as HTMLSelectElement;
-const grayscalePatchesSelect = document.getElementById("grayscalePatches") as HTMLSelectElement;
 const colourPatchesInfo = document.getElementById("colourPatchesInfo") as HTMLElement;
-const grayscalePatchesInfo = document.getElementById("grayscalePatchesInfo") as HTMLElement;
 const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
 const settingsButton = document.getElementById("settingsButton") as HTMLButtonElement;
 const settingsDialog = document.getElementById("settingsDialog") as HTMLDialogElement;
@@ -17,13 +15,9 @@ const closeDialogButton = document.getElementById("closeDialog") as HTMLButtonEl
 
 const patchesRemaining = document.querySelector(`[data-mode="patchesRemaining"]`) as HTMLElement;
 
-type Mode = "colour" | "grayscale";
-
 interface State {
-  mode: Mode;
   colorSpace: ColorSpace;
   colourPatchesPerChannel: number;
-  grayscalePatches: number;
   interval: number;
   running: boolean;
   preQueueIdx: number;
@@ -33,11 +27,9 @@ interface State {
 }
 
 const state: State = {
-  mode: "colour",
-  colorSpace: "srgb",
-  colourPatchesPerChannel: 16,
-  grayscalePatches: 32,
-  interval: 500,
+  colorSpace: getWidestColorSpace(),
+  colourPatchesPerChannel: 20,
+  interval: 200,
   running: false,
   preQueueIdx: 0,
   queueIdx: 0,
@@ -55,22 +47,6 @@ statusEl.addEventListener("click", (e) => {
       break;
     case "stop":
       stop();
-      break;
-    default:
-      break;
-  }
-});
-
-settingsDialog.addEventListener("click", (e) => {
-  const target = e.target as HTMLElement;
-  const { mode } = target.dataset;
-
-  switch (mode) {
-    case "colour":
-      changeMode(mode as Mode);
-      break;
-    case "grayscale":
-      changeMode(mode as Mode);
       break;
     default:
       break;
@@ -99,10 +75,18 @@ colourPatchesPerChannelSelect.addEventListener("change", (e) => {
   changeColourPatchesPerChannel(parseInt(target.value));
 });
 
-grayscalePatchesSelect.addEventListener("change", (e) => {
-  const target = e.target as HTMLSelectElement;
-  changeGrayscalePatches(parseInt(target.value));
-});
+function getWidestColorSpace(): ColorSpace {
+  // Check for Rec. 2020 support
+  if (window.matchMedia("(color-gamut: rec2020)").matches) {
+    return "rec2020";
+  }
+  // Check for P3 support
+  if (window.matchMedia("(color-gamut: p3)").matches) {
+    return "display-p3";
+  }
+  // Fallback to sRGB
+  return "srgb";
+}
 
 function start() {
   if (state.running === true) {
@@ -128,16 +112,7 @@ function start() {
 
   const onStart = () => {
     return new Promise<void>((resolve) => {
-      switch (state.mode) {
-        case "colour":
-          state.queue = colourPatches(state.colourPatchesPerChannel, state.colorSpace);
-          break;
-        case "grayscale":
-          state.queue = grayscalePatches(state.grayscalePatches, state.colorSpace);
-          break;
-        default:
-          break;
-      }
+      state.queue = colourPatches(state.colourPatchesPerChannel, state.colorSpace);
 
       const interval = accurateInterval(() => {
         if (state.running === false || state.queueIdx === state.queue.length) {
@@ -166,17 +141,6 @@ function stop() {
   backgroundEl.style.backgroundColor = "";
 
   patchesRemaining.textContent = "Finished";
-}
-
-function changeMode(mode: Mode) {
-  if (state.running === false) {
-    state.mode = mode;
-
-    settingsDialog
-      .querySelectorAll("button[data-mode]")
-      .forEach((e) => e.classList.remove("active"));
-    settingsDialog.querySelector(`[data-mode="${mode}"]`)?.classList.add("active");
-  }
 }
 
 function toggleFullscreen() {
@@ -213,29 +177,14 @@ function changeColourPatchesPerChannel(quantity: number) {
   }
 }
 
-function changeGrayscalePatches(quantity: number) {
-  if (state.running === false) {
-    state.grayscalePatches = quantity;
-    updateGrayscalePatchesInfo();
-  }
-}
-
 function updateColourPatchesInfo() {
   const totalPatches = Math.pow(state.colourPatchesPerChannel, 3);
-  const estimatedTime = (totalPatches * state.interval) / 1000;
+  // Add 7 seconds for pre-start phase (3 white/black cycles + 1 white at 1s each = 7s)
+  const estimatedTime = (totalPatches * state.interval) / 1000 + 7;
   const minutes = Math.floor(estimatedTime / 60);
   const seconds = Math.round(estimatedTime % 60);
 
   colourPatchesInfo.textContent = `${totalPatches.toLocaleString()} total patches (~${minutes}m ${seconds}s)`;
-}
-
-function updateGrayscalePatchesInfo() {
-  const totalPatches = state.grayscalePatches;
-  const estimatedTime = (totalPatches * state.interval) / 1000;
-  const minutes = Math.floor(estimatedTime / 60);
-  const seconds = Math.round(estimatedTime % 60);
-
-  grayscalePatchesInfo.textContent = `${totalPatches.toLocaleString()} total patches (~${minutes}m ${seconds}s)`;
 }
 
 function updateColorSpaceOptions() {
@@ -271,13 +220,9 @@ function updateColorSpaceOptions() {
 
 function onLoad() {
   updateColorSpaceOptions();
-  settingsDialog.querySelectorAll("button[data-mode]").forEach((e) => e.classList.remove("active"));
-  settingsDialog.querySelector(`[data-mode="${state.mode}"]`)?.classList.add("active");
   colorSpaceSelect.value = state.colorSpace;
   colourPatchesPerChannelSelect.value = state.colourPatchesPerChannel.toString();
-  grayscalePatchesSelect.value = state.grayscalePatches.toString();
   updateColourPatchesInfo();
-  updateGrayscalePatchesInfo();
 }
 
 onLoad();
